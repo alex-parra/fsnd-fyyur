@@ -1,5 +1,14 @@
 # Fyyur - Udacity Fullstack Nanodegree Project
 
+## Local setup
+
+1. clone repo
+2. Init env `python3 -m venv env`
+3. Install deps `python3 -m pip install -r requirements.txt`
+4. Start postgres `docker-compose up -d`
+5. Create db (if not done yet) `sh boot.sh db-init`
+6. Start flask `sh boot.sh dev`
+
 ---
 
 ### Introduction
