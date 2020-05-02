@@ -178,9 +178,8 @@ def venues():
 @app.route('/venues/search', methods=['GET'])
 def search_venues():
     search_term = request.args.get('q', '')
-    matches = Venue.query.filter(
-        Venue.name.ilike("%{}%".format(search_term))).all()
-
+    search_term_filter = Venue.name.ilike("%{}%".format(search_term))
+    matches = Venue.query.filter(search_term_filter).all()
     response = {"count": len(matches), "data": matches}
     return render_template('pages/search_venues.html', results=response, search_term=search_term)
 
@@ -188,6 +187,8 @@ def search_venues():
 @app.route('/venues/<int:venue_id>', methods=['GET'])
 def show_venue(venue_id):
     venue = Venue.query.get(venue_id)
+    if venue is None:
+        return abort(404)
     return render_template('pages/show_venue.html', venue=venue)
 
 
@@ -203,7 +204,6 @@ def create_venue_submission():
     form = VenueForm(request.form)
     form.populate_obj(newVenue)
     newVenue.genres = json.dumps(request.form.getlist('genres'))
-    # TODO: Validation
     try:
         db.session.add(newVenue)
         db.session.commit()
@@ -211,13 +211,14 @@ def create_venue_submission():
         flash(newVenue.name + ' was successfully listed!')
     except:
         flash('Failed: ' + newVenue.name + ' could not be created.')
-
     return redirect(url_for('venues'))
 
 
 @app.route('/venues/<int:venue_id>/edit', methods=['GET'])
 def edit_venue(venue_id):
     venue = Venue.query.get(venue_id)
+    if venue is None:
+        return abort(404)
     form = VenueForm(obj=venue)
     form.genres.data = venue.genres_list
     return render_template('forms/edit_venue.html', form=form, venue=venue)
@@ -226,14 +227,19 @@ def edit_venue(venue_id):
 @app.route('/venues/<int:venue_id>/edit', methods=['POST'])
 def edit_venue_submission(venue_id):
     venue = Venue.query.get(venue_id)
+    if venue is None:
+        return abort(404)
     form = VenueForm(request.form, obj=venue)
     form.genres.data = venue.genres_list
-    # TODO: Validation
     form.populate_obj(venue)
     venue.genres = json.dumps(request.form.getlist('genres'))
-    db.session.add(venue)
-    db.session.commit()
-    return redirect(url_for('show_venue', venue_id=venue_id))
+    try:
+        db.session.add(venue)
+        db.session.commit()
+        return redirect(url_for('show_venue', venue_id=venue_id))
+    except:
+        flash('Failed to save changes')
+        return redirect(url_for('edit_venue', venue_id=venue_id))
 
 
 @app.route('/venues/<int:venue_id>', methods=['DELETE'])
@@ -257,9 +263,8 @@ def artists():
 @app.route('/artists/search', methods=['GET'])
 def search_artists():
     search_term = request.args.get('q', '')
-    matches = Artist.query.filter(
-        Artist.name.ilike("%{}%".format(search_term))).all()
-
+    search_term_filter = Artist.name.ilike("%{}%".format(search_term))
+    matches = Artist.query.filter(search_term_filter).all()
     response = {"count": len(matches), "data": matches}
     return render_template('pages/search_artists.html', results=response, search_term=search_term)
 
@@ -267,6 +272,8 @@ def search_artists():
 @app.route('/artists/<int:artist_id>', methods=['GET'])
 def show_artist(artist_id):
     artist = Artist.query.get(artist_id)
+    if artist is None:
+        return abort(404)
     return render_template('pages/show_artist.html', artist=artist)
 
 
@@ -282,20 +289,20 @@ def create_artist_submission():
     form = ArtistForm(request.form)
     form.populate_obj(newArtist)
     newArtist.genres = json.dumps(request.form.getlist('genres'))
-    # TODO: Validation
     try:
         db.session.add(newArtist)
         db.session.commit()
         flash(newArtist.name + ' was successfully listed!')
     except:
         flash('Failed: ' + newArtist.name + ' could not be created.')
-
     return redirect(url_for('artists'))
 
 
 @app.route('/artists/<int:artist_id>/edit', methods=['GET'])
 def edit_artist(artist_id):
     artist = Artist.query.get(artist_id)
+    if artist is None:
+        return abort(404)
     form = ArtistForm(obj=artist)
     form.genres.data = artist.genres_list
     return render_template('forms/edit_artist.html', form=form, artist=artist)
@@ -304,14 +311,19 @@ def edit_artist(artist_id):
 @app.route('/artists/<int:artist_id>/edit', methods=['POST'])
 def edit_artist_submission(artist_id):
     artist = Artist.query.get(artist_id)
+    if artist is None:
+        return abort(404)
     form = ArtistForm(request.form, obj=artist)
     form.genres.data = artist.genres_list
-    # TODO: Validation
     form.populate_obj(artist)
     artist.genres = json.dumps(request.form.getlist('genres'))
-    db.session.add(artist)
-    db.session.commit()
-    return redirect(url_for('show_artist', artist_id=artist_id))
+    try:
+        db.session.add(artist)
+        db.session.commit()
+        return redirect(url_for('show_artist', artist_id=artist_id))
+    except:
+        flash('Failed to save changes')
+        return redirect(url_for('edit_artist', artist_id=artist_id))
 
 
 #  Shows
@@ -345,15 +357,14 @@ def create_show():
 @app.route('/shows/create', methods=['POST'])
 def create_show_submission():
     newShow = Show()
-    form = ShowForm(request.form)
+    form = ShowForm()
     form.populate_obj(newShow)
-    # TODO: Validation
     try:
         db.session.add(newShow)
         db.session.commit()
         flash('Show was successfully listed!')
     except:
-        flash('Failed Show could not be created.')
+        flash('Failed: Show could not be created.')
 
     return redirect(url_for('shows'))
 
