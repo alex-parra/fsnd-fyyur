@@ -45,7 +45,7 @@ class Venue(db.Model):
     seeking_talent = db.Column(db.Boolean())
     seeking_description = db.Column(db.Text())
 
-    shows = db.relationship('Show', 'venue_id')
+    shows = db.relationship('Show', backref='Venue')
 
 
 class Artist(db.Model):
@@ -63,7 +63,7 @@ class Artist(db.Model):
     seeking_venue = db.Column(db.Boolean())
     seeking_description = db.Column(db.Text())
 
-    shows = db.relationship('Show', 'artist_id')
+    shows = db.relationship('Show', backref='Artist')
 
 
 class Show(db.Model):
@@ -269,17 +269,7 @@ def delete_venue(venue_id):
 #  ----------------------------------------------------------------
 @app.route('/artists')
 def artists():
-    # TODO: replace with real data returned from querying the database
-    data = [{
-        "id": 4,
-        "name": "Guns N Petals",
-    }, {
-        "id": 5,
-        "name": "Matt Quevedo",
-    }, {
-        "id": 6,
-        "name": "The Wild Sax Band",
-    }]
+    data = Artist.query.order_by(Artist.id).all()
     return render_template('pages/artists.html', artists=data)
 
 
