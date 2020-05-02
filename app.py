@@ -191,7 +191,7 @@ def show_venue(venue_id):
 
 
 @app.route('/venues/create', methods=['GET'])
-def create_venue_form():
+def create_venue():
     form = VenueForm()
     return render_template('forms/new_venue.html', form=form)
 
@@ -199,19 +199,12 @@ def create_venue_form():
 @app.route('/venues/create', methods=['POST'])
 def create_venue_submission():
     newVenue = Venue()
-    newVenue.name = request.form.get('name')
-    newVenue.address = request.form.get('address')
-    newVenue.city = request.form.get('city')
-    newVenue.state = request.form.get('state')
-    newVenue.phone = request.form.get('phone')
+    form = VenueForm(request.form)
+    form.populate_obj(newVenue)
     newVenue.genres = json.dumps(request.form.getlist('genres'))
-    newVenue.facebook_link = request.form.get('facebook_link')
-    newVenue.seeking_talent = request.form.get(
-        'seeking_talent', default=False, type=bool)
-    newVenue.seeking_description = request.form.get('seeking_description')
-    db.session.add(newVenue)
-
+    # TODO: Validation
     try:
+        db.session.add(newVenue)
         db.session.commit()
         data = Venue.query.filter(Venue.name == newVenue.name).first()
         flash('Venue ' + data.name + ' was successfully listed!')
@@ -219,7 +212,7 @@ def create_venue_submission():
         flash('An error occurred. Venue ' +
               newVenue.name + ' could not be created.')
 
-    return redirect(url_for('index'))
+    return redirect(url_for('venues'))
 
 
 @app.route('/venues/<int:venue_id>/edit', methods=['GET'])
@@ -278,22 +271,28 @@ def show_artist(artist_id):
 
 
 @app.route('/artists/create', methods=['GET'])
-def create_artist_form():
+def create_artist():
     form = ArtistForm()
     return render_template('forms/new_artist.html', form=form)
 
 
 @app.route('/artists/create', methods=['POST'])
 def create_artist_submission():
-    # called upon submitting the new artist listing form
-    # TODO: insert form data as a new Venue record in the db, instead
-    # TODO: modify data to be the data object returned from db insertion
+    newArtist = Artist()
+    form = ArtistForm(request.form)
+    form.populate_obj(newArtist)
+    newArtist.genres = json.dumps(request.form.getlist('genres'))
+    # TODO: Validation
+    try:
+        db.session.add(newArtist)
+        db.session.commit()
+        data = Artist.query.filter(Artist.name == newArtist.name).first()
+        flash('Artist ' + data.name + ' was successfully listed!')
+    except:
+        flash('An error occurred. Venue ' +
+              newArtist.name + ' could not be created.')
 
-    # on successful db insert, flash success
-    flash('Artist ' + request.form['name'] + ' was successfully listed!')
-    # TODO: on unsuccessful db insert, flash an error instead.
-    # e.g., flash('An error occurred. Artist ' + data.name + ' could not be listed.')
-    return render_template('pages/home.html')
+    return redirect(url_for('artists'))
 
 
 @app.route('/artists/<int:artist_id>/edit', methods=['GET'])

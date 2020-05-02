@@ -37,6 +37,7 @@
   </div>
   <div class="venue-image col-sm-6" style="background-image: url({{ venue.image_link }});"></div>
 </div>
+
 <section>
   <h2 class="monospace">
     {{ venue.upcoming_shows_count }} Upcoming {% if venue.upcoming_shows_count == 1 %}Show{% else %}Shows{% endif %}
@@ -57,6 +58,7 @@
     {% endfor %}
   </div>
 </section>
+
 <section>
   <h2 class="monospace">
     {{ venue.past_shows_count }} Past {% if venue.past_shows_count == 1 %}Show{% else %}Shows{% endif %}

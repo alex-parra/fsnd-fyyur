@@ -1,19 +1,22 @@
-{% extends 'layouts/main.html' %}
-{% block title %}Fyyur | Venues{% endblock %}
-{% block content %}
+{% extends 'layouts/main.html' %} {% block title %}Fyyur | Venues{% endblock %} {% block content %}
+
+<div class="flex-center">
+  <h1>Venues</h1>
+  <a href="{{url_for('create_venue')}}">Post a Venue</a>
+</div>
+
 {% for area in areas %}
-<h3>{{ area.city }}, {{ area.state }}</h3>
-	<ul class="items">
-		{% for venue in area.venues %}
-		<li>
-			<a href="/venues/{{ venue.id }}">
-				<i class="fas fa-music"></i>
-				<div class="item">
-					<h5>{{ venue.name }}</h5>
-				</div>
-			</a>
-		</li>
-		{% endfor %}
-	</ul>
-{% endfor %}
-{% endblock %}
+<h5>{{ area.city }}, {{ area.state }}</h5>
+<ul class="items">
+  {% for venue in area.venues %}
+  <li>
+    <a href="/venues/{{ venue.id }}">
+      <i class="fas fa-music"></i>
+      <div class="item">
+        <h4>{{ venue.name }}</h4>
+      </div>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% endfor %} {% endblock %}

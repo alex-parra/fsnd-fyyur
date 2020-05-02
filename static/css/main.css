@@ -58,6 +58,12 @@ p.lead {
 
 /* Various other styles end */
 
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 #front-splash {
   width: 100%;
 }
@@ -119,6 +125,7 @@ ul.items > li > a {
 }
 ul.items > li > a > i {
   padding: 7px 10px 0;
+  align-self: center;
 }
 ul.items > li:hover {
   color: orange;
