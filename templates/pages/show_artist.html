@@ -9,7 +9,7 @@ endblock %} {% block content %}
       ID: {{ artist.id }}
     </p>
     <div class="genres">
-      {% for genre in artist.genresList() %}
+      {% for genre in artist.genres_list %}
       <span class="genre">{{ genre }}</span>
       {% endfor %}
     </div>
