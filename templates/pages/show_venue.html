@@ -1,13 +1,18 @@
 {% extends 'layouts/main.html' %} {% block title %}Venue Search{% endblock %} {% block content %}
-<div class="row">
+<div class="venue-show row">
   <div class="col-sm-6">
-    <h1 class="flex-center monospace">
-      {{ venue.name }}
-      <button class="venue-delete" data-id="{{venue.id}}">&cross;</button>
-    </h1>
-    <p class="subtitle">
+    <div class="subtitle">
       ID: {{ venue.id }}
-    </p>
+      <div class="tools">
+        <a href="/venues/{{venue.id}}/edit" aria-label="Edit Venue" title="Edit Venue"><i class="fas fa-edit"></i></a>
+        <button class="btn-delete" data-id="{{venue.id}}" data-name="{{venue.name}}" aria-label="Delete Venue" title="Delete Venue"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+
+    <h1 class="monospace">
+      {{ venue.name }}
+    </h1>
+
     <div class="genres">
       {% for genre in venue.genres_list %}
       <span class="genre">{{ genre }}</span>
@@ -30,9 +35,7 @@
     <p class="not-seeking"><i class="fas fa-moon"></i> Not currently seeking talent</p>
     {% endif %}
   </div>
-  <div class="venue-image col-sm-6">
-    <img src="{{ venue.image_link }}" alt="Venue Image" />
-  </div>
+  <div class="venue-image col-sm-6" style="background-image: url({{ venue.image_link }});"></div>
 </div>
 <section>
   <h2 class="monospace">

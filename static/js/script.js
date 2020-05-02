@@ -4,9 +4,10 @@ window.parseISOString = function parseISOString(s) {
 };
 
 jQuery(($) => {
-  $(document).on("click", ".venue-delete", async function () {
+  $(document).on("click", ".venue-show .btn-delete", async function () {
     const el = $(this);
     try {
+      if (!confirm("Delete " + el.data("name") + ".\nAre you sure?")) return;
       const res = await fetch("/venues/" + el.data("id"), { method: "DELETE" });
       if (!res.ok) throw new Error("Delete failed");
       window.location = "/venues";
