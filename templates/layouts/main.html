@@ -56,10 +56,11 @@
               {% if (request.endpoint == 'venues') or
                 (request.endpoint == 'search_venues') or
                 (request.endpoint == 'show_venue') %}
-              <form class="search" method="post" action="/venues/search">
+              <form class="search" method="get" action="/venues/search">
                 <input class="form-control"
                   type="search"
-                  name="search_term"
+                  name="q"
+                  value="{{request.args.get('q', '')}}"
                   placeholder="Find a venue"
                   aria-label="Search">
               </form>
@@ -70,8 +71,8 @@
               <form class="search" method="get" action="/artists/search">
                 <input class="form-control"
                   type="search"
-                  value="{{request.args.get('q', '')}}"
                   name="q"
+                  value="{{request.args.get('q', '')}}"
                   placeholder="Find an artist"
                   aria-label="Search">
               </form>
