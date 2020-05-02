@@ -58,6 +58,10 @@ p.lead {
 
 /* Various other styles end */
 
+*:first-child {
+  margin-top: 0;
+}
+
 .flex-center {
   display: flex;
   align-items: center;

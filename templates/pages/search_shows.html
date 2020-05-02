@@ -1,12 +1,8 @@
-{% extends 'layouts/main.html' %} {% block title %}Fyyur | Shows{% endblock %} {% block content %}
+{% extends 'layouts/main.html' %} {% block title %}Fyyur | Shows Search{% endblock %} {% block content %}
+<h3>Number of search results for "{{ search_term }}": {{ results.count }}</h3>
 
-<div class="flex-center">
-  <h1>Shows</h1>
-  <a href="{{url_for('create_show')}}">Post a Show</a>
-</div>
-
-<div class="row shows">
-  {%for show in shows %}
+<div class="row">
+  {%for show in results.data %}
   <div class="col-sm-4">
     <div class="tile tile-show">
       <img src="{{ show.artist_image_link }}" alt="Artist Image" />

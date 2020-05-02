@@ -8,6 +8,7 @@ import babel
 from flask import Flask, render_template, request, Response, flash, redirect, url_for, abort
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_
 from flask_migrate import Migrate
 import logging
 from logging import Formatter, FileHandler
@@ -207,10 +208,9 @@ def create_venue_submission():
         db.session.add(newVenue)
         db.session.commit()
         data = Venue.query.filter(Venue.name == newVenue.name).first()
-        flash('Venue ' + data.name + ' was successfully listed!')
+        flash(newVenue.name + ' was successfully listed!')
     except:
-        flash('An error occurred. Venue ' +
-              newVenue.name + ' could not be created.')
+        flash('Failed: ' + newVenue.name + ' could not be created.')
 
     return redirect(url_for('venues'))
 
@@ -286,11 +286,9 @@ def create_artist_submission():
     try:
         db.session.add(newArtist)
         db.session.commit()
-        data = Artist.query.filter(Artist.name == newArtist.name).first()
-        flash('Artist ' + data.name + ' was successfully listed!')
+        flash(newArtist.name + ' was successfully listed!')
     except:
-        flash('An error occurred. Venue ' +
-              newArtist.name + ' could not be created.')
+        flash('Failed: ' + newArtist.name + ' could not be created.')
 
     return redirect(url_for('artists'))
 
@@ -325,24 +323,39 @@ def shows():
     return render_template('pages/shows.html', shows=shows)
 
 
+@app.route('/shows/search', methods=['GET'])
+def search_shows():
+    search_term = request.args.get('q', '')
+    matches = Show.query.join(Show.artist).filter(or_(
+        Artist.name.ilike("%{}%".format(search_term)),
+        Venue.name.ilike("%{}%".format(search_term))
+    )).all()
+    response = {"count": len(matches), "data": matches}
+    return render_template('pages/search_shows.html', results=response, search_term=search_term)
+
+
 @app.route('/shows/create', methods=['GET'])
-def create_shows():
-    # renders form. do not touch.
+def create_show():
     form = ShowForm()
-    return render_template('forms/new_show.html', form=form)
+    artists = Artist.query.all()
+    venues = Venue.query.all()
+    return render_template('forms/new_show.html', form=form, artists=artists, venues=venues)
 
 
 @app.route('/shows/create', methods=['POST'])
 def create_show_submission():
-    # called to create new shows in the db, upon submitting new show listing form
-    # TODO: insert form data as a new Show record in the db, instead
+    newShow = Show()
+    form = ShowForm(request.form)
+    form.populate_obj(newShow)
+    # TODO: Validation
+    try:
+        db.session.add(newShow)
+        db.session.commit()
+        flash('Show was successfully listed!')
+    except:
+        flash('Failed Show could not be created.')
 
-    # on successful db insert, flash success
-    flash('Show was successfully listed!')
-    # TODO: on unsuccessful db insert, flash an error instead.
-    # e.g., flash('An error occurred. Show could not be listed.')
-    # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
-    return render_template('pages/home.html')
+    return redirect(url_for('shows'))
 
 
 @app.errorhandler(404)
