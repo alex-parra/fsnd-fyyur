@@ -218,10 +218,26 @@ h2.monospace {
 .form-wrapper {
   max-width: 600px;
   padding-bottom: 80px;
+  margin: 0 auto;
+}
+
+.form-heading {
+  position: relative;
 }
 
 .form-heading a {
   font-size: 1rem;
+}
+
+.form-heading > a:first-child {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  transform: translate(-0.5em, -50%);
+}
+
+.form-heading > a:first-child:not(:hover) {
+  color: #999;
 }
 
 .form-inline {
