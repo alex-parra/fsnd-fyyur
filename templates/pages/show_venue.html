@@ -4,7 +4,7 @@
     <div class="subtitle">
       ID: {{ venue.id }}
       <div class="tools">
-        <a href="/venues/{{venue.id}}/edit" aria-label="Edit Venue" title="Edit Venue"><i class="fas fa-edit"></i></a>
+        <a href="{{ url_for('edit_venue', venue_id=venue.id) }}" aria-label="Edit Venue" title="Edit Venue"><i class="fas fa-edit"></i></a>
         <button class="btn-delete" data-id="{{venue.id}}" data-name="{{venue.name}}" aria-label="Delete Venue" title="Delete Venue"><i class="fas fa-trash"></i></button>
       </div>
     </div>

@@ -1,40 +1,28 @@
-{% extends 'layouts/main.html' %} {% block title %}{{ artist.name }} | Artist{%
-endblock %} {% block content %}
-<div class="row">
+{% extends 'layouts/main.html' %} {% block title %}{{ artist.name }} | Artist{% endblock %} {% block content %}
+<div class="artist-show row">
   <div class="col-sm-6">
+    <div class="subtitle">
+      ID: {{ artist.id }}
+      <div class="tools">
+        <a href="{{ url_for('edit_artist', artist_id=artist.id) }}" aria-label="Edit Artist" title="Edit Artist"><i class="fas fa-edit"></i></a>
+        <button class="btn-delete" data-id="{{artist.id}}" data-name="{{artist.name}}" aria-label="Delete Artist" title="Delete Artist"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+
     <h1 class="monospace">
       {{ artist.name }}
     </h1>
-    <p class="subtitle">
-      ID: {{ artist.id }}
-    </p>
+
     <div class="genres">
       {% for genre in artist.genres_list %}
       <span class="genre">{{ genre }}</span>
       {% endfor %}
     </div>
-    <p>
-      <i class="fas fa-globe-americas"></i> {{ artist.city }}, {{ artist.state
-      }}
-    </p>
-    <p>
-      <i class="fas fa-phone-alt"></i> {% if artist.phone %}{{ artist.phone }}{%
-      else %}No Phone{% endif %}
-    </p>
-    <p>
-      <i class="fas fa-link"></i> {% if artist.website %}<a
-        href="{{ artist.website }}"
-        target="_blank"
-        >{{ artist.website }}</a
-      >{% else %}No Website{% endif %}
-    </p>
-    <p>
-      <i class="fab fa-facebook-f"></i> {% if artist.facebook_link %}<a
-        href="{{ artist.facebook_link }}"
-        target="_blank"
-        >{{ artist.facebook_link }}</a
-      >{% else %}No Facebook Link{% endif %}
-    </p>
+
+    <p><i class="fas fa-globe-americas"></i> {{ artist.city }}, {{ artist.state }}</p>
+    <p><i class="fas fa-phone-alt"></i> {% if artist.phone %}{{ artist.phone }}{% else %}No Phone{% endif %}</p>
+    <p><i class="fas fa-link"></i> {% if artist.website %}<a href="{{ artist.website }}" target="_blank">{{ artist.website }}</a>{% else %}No Website{% endif %}</p>
+    <p><i class="fab fa-facebook-f"></i> {% if artist.facebook_link %}<a href="{{ artist.facebook_link }}" target="_blank">{{ artist.facebook_link }}</a>{% else %}No Facebook Link{% endif %}</p>
     {% if artist.seeking_venue %}
     <div class="seeking">
       <p class="lead">Currently seeking performance venues</p>
@@ -44,19 +32,14 @@ endblock %} {% block content %}
       </div>
     </div>
     {% else %}
-    <p class="not-seeking">
-      <i class="fas fa-moon"></i> Not currently seeking performance venues
-    </p>
+    <p class="not-seeking"><i class="fas fa-moon"></i> Not currently seeking performance venues</p>
     {% endif %}
   </div>
-  <div class="col-sm-6">
-    <img src="{{ artist.image_link }}" alt="Venue Image" />
-  </div>
+  <div class="artist-image col-sm-6" style="background-image: url({{ artist.image_link }});"></div>
 </div>
 <section>
   <h2 class="monospace">
-    {{ artist.upcoming_shows_count }} Upcoming {% if artist.upcoming_shows_count
-    == 1 %}Show{% else %}Shows{% endif %}
+    {{ artist.upcoming_shows_count }} Upcoming {% if artist.upcoming_shows_count == 1 %}Show{% else %}Shows{% endif %}
   </h2>
   <div class="row">
     {% if artist.upcoming_shows_count == 0 %}
@@ -74,8 +57,7 @@ endblock %} {% block content %}
 </section>
 <section>
   <h2 class="monospace">
-    {{ artist.past_shows_count }} Past {% if artist.past_shows_count == 1
-    %}Show{% else %}Shows{% endif %}
+    {{ artist.past_shows_count }} Past {% if artist.past_shows_count == 1 %}Show{% else %}Shows{% endif %}
   </h2>
   <div class="row">
     {% if artist.past_shows_count == 0 %}
