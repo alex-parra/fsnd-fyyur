@@ -189,9 +189,6 @@ def show_venue(venue_id):
     venue = Venue.query.get(venue_id)
     return render_template('pages/show_venue.html', venue=venue)
 
-#  Create Venue
-#  ----------------------------------------------------------------
-
 
 @app.route('/venues/create', methods=['GET'])
 def create_venue_form():
@@ -210,68 +207,6 @@ def create_venue_submission():
     # e.g., flash('An error occurred. Venue ' + data.name + ' could not be listed.')
     # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
     return render_template('pages/home.html')
-
-
-@app.route('/venues/<venue_id>', methods=['DELETE'])
-def delete_venue(venue_id):
-    # TODO: Complete this endpoint for taking a venue_id, and using
-    # SQLAlchemy ORM to delete a record. Handle cases where the session commit could fail.
-
-    # BONUS CHALLENGE: Implement a button to delete a Venue on a Venue Page, have it so that
-    # clicking that button delete it from the db then redirect the user to the homepage
-    return None
-
-#  Artists
-#  ----------------------------------------------------------------
-@app.route('/artists', methods=['GET'])
-def artists():
-    data = Artist.query.order_by(Artist.id).all()
-    return render_template('pages/artists.html', artists=data)
-
-
-@app.route('/artists/search', methods=['GET'])
-def search_artists():
-    search_term = request.args.get('q', '')
-    matches = Artist.query.filter(
-        Artist.name.ilike("%{}%".format(search_term))).all()
-
-    response = {"count": len(matches), "data": matches}
-    return render_template('pages/search_artists.html', results=response, search_term=search_term)
-
-
-@app.route('/artists/<int:artist_id>', methods=['GET'])
-def show_artist(artist_id):
-    artist = Artist.query.get(artist_id)
-    return render_template('pages/show_artist.html', artist=artist)
-
-#  Update
-#  ----------------------------------------------------------------
-@app.route('/artists/<int:artist_id>/edit', methods=['GET'])
-def edit_artist(artist_id):
-    form = ArtistForm()
-    artist = {
-        "id": 4,
-        "name": "Guns N Petals",
-        "genres": ["Rock n Roll"],
-        "city": "San Francisco",
-        "state": "CA",
-        "phone": "326-123-5000",
-        "website": "https://www.gunsnpetalsband.com",
-        "facebook_link": "https://www.facebook.com/GunsNPetals",
-        "seeking_venue": True,
-        "seeking_description": "Looking for shows to perform at in the San Francisco Bay Area!",
-        "image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80"
-    }
-    # TODO: populate form with fields from artist with ID <artist_id>
-    return render_template('forms/edit_artist.html', form=form, artist=artist)
-
-
-@app.route('/artists/<int:artist_id>/edit', methods=['POST'])
-def edit_artist_submission(artist_id):
-    # TODO: take values from the form submitted, and update existing
-    # artist record with ID <artist_id> using the new attributes
-
-    return redirect(url_for('show_artist', artist_id=artist_id))
 
 
 @app.route('/venues/<int:venue_id>/edit', methods=['GET'])
@@ -301,8 +236,39 @@ def edit_venue_submission(venue_id):
     # venue record with ID <venue_id> using the new attributes
     return redirect(url_for('show_venue', venue_id=venue_id))
 
-#  Create Artist
+
+@app.route('/venues/<venue_id>', methods=['DELETE'])
+def delete_venue(venue_id):
+    # TODO: Complete this endpoint for taking a venue_id, and using
+    # SQLAlchemy ORM to delete a record. Handle cases where the session commit could fail.
+
+    # BONUS CHALLENGE: Implement a button to delete a Venue on a Venue Page, have it so that
+    # clicking that button delete it from the db then redirect the user to the homepage
+    return None
+
+
+#  Artists
 #  ----------------------------------------------------------------
+@app.route('/artists', methods=['GET'])
+def artists():
+    data = Artist.query.order_by(Artist.id).all()
+    return render_template('pages/artists.html', artists=data)
+
+
+@app.route('/artists/search', methods=['GET'])
+def search_artists():
+    search_term = request.args.get('q', '')
+    matches = Artist.query.filter(
+        Artist.name.ilike("%{}%".format(search_term))).all()
+
+    response = {"count": len(matches), "data": matches}
+    return render_template('pages/search_artists.html', results=response, search_term=search_term)
+
+
+@app.route('/artists/<int:artist_id>', methods=['GET'])
+def show_artist(artist_id):
+    artist = Artist.query.get(artist_id)
+    return render_template('pages/show_artist.html', artist=artist)
 
 
 @app.route('/artists/create', methods=['GET'])
@@ -324,51 +290,41 @@ def create_artist_submission():
     return render_template('pages/home.html')
 
 
+@app.route('/artists/<int:artist_id>/edit', methods=['GET'])
+def edit_artist(artist_id):
+    form = ArtistForm()
+    artist = {
+        "id": 4,
+        "name": "Guns N Petals",
+        "genres": ["Rock n Roll"],
+        "city": "San Francisco",
+        "state": "CA",
+        "phone": "326-123-5000",
+        "website": "https://www.gunsnpetalsband.com",
+        "facebook_link": "https://www.facebook.com/GunsNPetals",
+        "seeking_venue": True,
+        "seeking_description": "Looking for shows to perform at in the San Francisco Bay Area!",
+        "image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80"
+    }
+    # TODO: populate form with fields from artist with ID <artist_id>
+    return render_template('forms/edit_artist.html', form=form, artist=artist)
+
+
+@app.route('/artists/<int:artist_id>/edit', methods=['POST'])
+def edit_artist_submission(artist_id):
+    # TODO: take values from the form submitted, and update existing
+    # artist record with ID <artist_id> using the new attributes
+
+    return redirect(url_for('show_artist', artist_id=artist_id))
+
+
 #  Shows
 #  ----------------------------------------------------------------
 
 @app.route('/shows', methods=['GET'])
 def shows():
-    # displays list of shows at /shows
-    # TODO: replace with real venues data.
-    #       num_shows should be aggregated based on number of upcoming shows per venue.
-    data = [{
-        "venue_id": 1,
-        "venue_name": "The Musical Hop",
-        "artist_id": 4,
-        "artist_name": "Guns N Petals",
-        "artist_image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80",
-        "start_time": "2019-05-21T21:30:00.000Z"
-    }, {
-        "venue_id": 3,
-        "venue_name": "Park Square Live Music & Coffee",
-        "artist_id": 5,
-        "artist_name": "Matt Quevedo",
-        "artist_image_link": "https://images.unsplash.com/photo-1495223153807-b916f75de8c5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80",
-        "start_time": "2019-06-15T23:00:00.000Z"
-    }, {
-        "venue_id": 3,
-        "venue_name": "Park Square Live Music & Coffee",
-        "artist_id": 6,
-        "artist_name": "The Wild Sax Band",
-        "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
-        "start_time": "2035-04-01T20:00:00.000Z"
-    }, {
-        "venue_id": 3,
-        "venue_name": "Park Square Live Music & Coffee",
-        "artist_id": 6,
-        "artist_name": "The Wild Sax Band",
-        "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
-        "start_time": "2035-04-08T20:00:00.000Z"
-    }, {
-        "venue_id": 3,
-        "venue_name": "Park Square Live Music & Coffee",
-        "artist_id": 6,
-        "artist_name": "The Wild Sax Band",
-        "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
-        "start_time": "2035-04-15T20:00:00.000Z"
-    }]
-    return render_template('pages/shows.html', shows=data)
+    shows = Show.query.all()
+    return render_template('pages/shows.html', shows=shows)
 
 
 @app.route('/shows/create', methods=['GET'])
