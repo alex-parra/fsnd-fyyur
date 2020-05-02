@@ -9,9 +9,10 @@
   {% for artist in artists %}
   <li>
     <a href="/artists/{{ artist.id }}">
-      <i class="fas fa-users"></i>
+      <div class="img" style="background-image: url({{artist.image_link}});"></div>
       <div class="item">
         <h4>{{ artist.name }}</h4>
+        <small>{{artist.genres_list|join(', ')}}</small>
       </div>
     </a>
   </li>

@@ -50,6 +50,13 @@ p.lead {
   background: #555;
   color: #fff;
 }
+
+.form-control {
+  height: auto;
+  font-size: 16px;
+  padding: 0.4em 0.5em;
+}
+
 /* Main elements end */
 
 /*****************************************************************************
@@ -71,6 +78,7 @@ p.lead {
 #front-splash {
   width: 100%;
 }
+
 .navbar.navbar-fixed-top {
   background: none;
   box-shadow: none;
@@ -116,28 +124,62 @@ p.lead {
   margin-right: 10px;
 }
 
+.listHeading {
+  text-transform: uppercase;
+  color: #444;
+  font-weight: 300;
+}
+
+.listHeading:not(:first-child) {
+  margin-top: 2em;
+}
+
 ul.items {
   list-style: none;
   padding: 0;
   margin: 0;
 }
+
+ul.items > li {
+  cursor: pointer;
+}
+
 ul.items > li > a {
   margin-bottom: 15px;
   display: flex;
-  color: initial;
   text-decoration: initial;
+  align-items: center;
 }
+
+ul.items > li > a:not(:hover) {
+  color: inherit;
+}
+
 ul.items > li > a > i {
-  padding: 7px 10px 0;
-  align-self: center;
+  padding: 7px 10px;
 }
-ul.items > li:hover {
-  color: orange;
-  cursor: pointer;
+
+ul.items > li > a .img {
+  width: 25%;
+  max-width: 200px;
+  background: transparent center no-repeat;
+  background-size: cover;
+  margin-right: 1em;
+  border-radius: 0.5em;
 }
-ul.items > li:hover h5 {
-  color: orange;
+
+ul.items > li > a .img::before {
+  content: "";
+  display: block;
+  padding-bottom: 75%;
 }
+
+ul.items > li h4 {
+  color: inherit;
+  margin: 0;
+  font-size: 1.3rem;
+}
+
 .item {
   padding: 5px 5px 5px;
   flex: 1;
@@ -160,6 +202,7 @@ p > i {
 .not-seeking {
   opacity: 0.6;
 }
+
 .seeking {
   display: inline-block;
   padding: 20px 30px;
@@ -169,15 +212,27 @@ p > i {
   background: #ffffc6;
 }
 
+.seeking > .lead {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.seeking .description {
+  font-size: 1.4rem;
+}
+
 .seeking > button {
   margin-left: 15px;
 }
+
 .description {
   max-width: 450px;
 }
+
 .genres {
   margin-bottom: 15px;
 }
+
 span.genre {
   display: inline-block;
   font-family: monospace;

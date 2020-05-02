@@ -5,18 +5,22 @@
   <a href="{{url_for('create_venue')}}">Post a Venue</a>
 </div>
 
-{% for area in areas %}
-<h5>{{ area.city }}, {{ area.state }}</h5>
-<ul class="items">
-  {% for venue in area.venues %}
-  <li>
-    <a href="/venues/{{ venue.id }}">
-      <i class="fas fa-music"></i>
-      <div class="item">
-        <h4>{{ venue.name }}</h4>
-      </div>
-    </a>
-  </li>
+<div class="venues-list">
+  {% for area in areas %}
+  <h5 class="listHeading">{{ area.city }}, {{ area.state }}</h5>
+  <ul class="items">
+    {% for venue in area.venues %}
+    <li>
+      <a href="/venues/{{ venue.id }}">
+        <div class="img" style="background-image: url({{venue.image_link}});"></div>
+        <div class="item">
+          <h4>{{ venue.name }}</h4>
+          <small>{{venue.genres_list|join(', ')}}</small>
+        </div>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
   {% endfor %}
-</ul>
-{% endfor %} {% endblock %}
+</div>
+{% endblock %}
