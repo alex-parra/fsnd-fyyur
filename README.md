@@ -7,6 +7,7 @@
 3. Install deps `python3 -m pip install -r requirements.txt`
 4. Start postgres `docker-compose up -d`
 5. Create db (if not done yet) `sh boot.sh db-init`
+   - Optional: Seed DB with files in `seeds/*.sql`
 6. Start flask `sh boot.sh dev`
 
 ---
