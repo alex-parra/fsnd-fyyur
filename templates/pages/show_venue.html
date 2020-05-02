@@ -1,9 +1,9 @@
-{% extends 'layouts/main.html' %} {% block title %}Venue Search{% endblock %} {%
-block content %}
+{% extends 'layouts/main.html' %} {% block title %}Venue Search{% endblock %} {% block content %}
 <div class="row">
   <div class="col-sm-6">
-    <h1 class="monospace">
+    <h1 class="flex-center monospace">
       {{ venue.name }}
+      <button class="venue-delete" data-id="{{venue.id}}">&cross;</button>
     </h1>
     <p class="subtitle">
       ID: {{ venue.id }}
@@ -13,31 +13,11 @@ block content %}
       <span class="genre">{{ genre }}</span>
       {% endfor %}
     </div>
-    <p>
-      <i class="fas fa-globe-americas"></i> {{ venue.city }}, {{ venue.state }}
-    </p>
-    <p>
-      <i class="fas fa-map-marker"></i> {% if venue.address %}{{ venue.address
-      }}{% else %}No Address{% endif %}
-    </p>
-    <p>
-      <i class="fas fa-phone-alt"></i> {% if venue.phone %}{{ venue.phone }}{%
-      else %}No Phone{% endif %}
-    </p>
-    <p>
-      <i class="fas fa-link"></i> {% if venue.website %}<a
-        href="{{ venue.website }}"
-        target="_blank"
-        >{{ venue.website }}</a
-      >{% else %}No Website{% endif %}
-    </p>
-    <p>
-      <i class="fab fa-facebook-f"></i> {% if venue.facebook_link %}<a
-        href="{{ venue.facebook_link }}"
-        target="_blank"
-        >{{ venue.facebook_link }}</a
-      >{% else %}No Facebook Link{% endif %}
-    </p>
+    <p><i class="fas fa-globe-americas"></i> {{ venue.city }}, {{ venue.state }}</p>
+    <p><i class="fas fa-map-marker"></i> {% if venue.address %}{{ venue.address }}{% else %}No Address{% endif %}</p>
+    <p><i class="fas fa-phone-alt"></i> {% if venue.phone %}{{ venue.phone }}{% else %}No Phone{% endif %}</p>
+    <p><i class="fas fa-link"></i> {% if venue.website %}<a href="{{ venue.website }}" target="_blank">{{ venue.website }}</a>{% else %}No Website{% endif %}</p>
+    <p><i class="fab fa-facebook-f"></i> {% if venue.facebook_link %}<a href="{{ venue.facebook_link }}" target="_blank">{{ venue.facebook_link }}</a>{% else %}No Facebook Link{% endif %}</p>
     {% if venue.seeking_talent %}
     <div class="seeking">
       <p class="lead">Currently seeking talent</p>
@@ -47,19 +27,16 @@ block content %}
       </div>
     </div>
     {% else %}
-    <p class="not-seeking">
-      <i class="fas fa-moon"></i> Not currently seeking talent
-    </p>
+    <p class="not-seeking"><i class="fas fa-moon"></i> Not currently seeking talent</p>
     {% endif %}
   </div>
-  <div class="col-sm-6">
+  <div class="venue-image col-sm-6">
     <img src="{{ venue.image_link }}" alt="Venue Image" />
   </div>
 </div>
 <section>
   <h2 class="monospace">
-    {{ venue.upcoming_shows_count }} Upcoming {% if venue.upcoming_shows_count
-    == 1 %}Show{% else %}Shows{% endif %}
+    {{ venue.upcoming_shows_count }} Upcoming {% if venue.upcoming_shows_count == 1 %}Show{% else %}Shows{% endif %}
   </h2>
   <div class="row">
     {% if venue.upcoming_shows_count == 0 %}
@@ -79,8 +56,7 @@ block content %}
 </section>
 <section>
   <h2 class="monospace">
-    {{ venue.past_shows_count }} Past {% if venue.past_shows_count == 1 %}Show{%
-    else %}Shows{% endif %}
+    {{ venue.past_shows_count }} Past {% if venue.past_shows_count == 1 %}Show{% else %}Shows{% endif %}
   </h2>
   <div class="row">
     {% if venue.past_shows_count == 0 %}
